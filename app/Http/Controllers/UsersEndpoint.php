@@ -18,7 +18,9 @@ class UsersEndpoint extends Controller
         $data = User::all();
 
         return response()->json([
+
             $data->toArray(),
+
         ]);
     }
 
@@ -96,6 +98,7 @@ class UsersEndpoint extends Controller
         } else {    
             return response()->json('Wrong password or mail',
             );
+
         }
 
     }
