@@ -45,6 +45,7 @@ class DemandesEndpoint extends Controller
 
         return response()->json([
             Demande::all()->toArray(),
+            
         ]);
 
     }
