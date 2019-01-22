@@ -15,37 +15,49 @@ class UsersEndpoint extends Controller
 	public function index()
     {
 
-        $data = QueryBuilder::for(User::class)
-            ->paginate()
-        ;
+        $data = User::all();
 
-        return response()->json($data);
+        return response()->json([
+            $data->toArray(),
+        ]);
     }
 
     public function show(User $user)
     {
+
         return response()->json([
-            'data' => $user->toArray(),
+            $user->toArray(),
         ]);
     }
 
-	public function store(Request $request, User $user)
+	public function store(Request $request)
     {
-        $user = new User();
-        $user->fillFromRequest();
-        $user->saveOrFail();
+        $user = new User([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'mail' => $request->mail,
+            'password' => $request->password,
+            'numRue' => $request->numRue,
+            'adresse' => $request->adresse,
+            'cdp' => $request->cdp,
+            'ville' => $request->ville,
+            'sexe' => $request->sexe,
+            'telephone' => $request->telephone,
+        ]);
+
+        $user->save();
 
         $user = User::find($user->id);
 
         return response()->json([
-            'data' => User::all()->toArray(),
+            User::all()->toArray(),
         ]);
 
     }
 
     public function update(Request $request, User $user)
     {
-        $user->fillFromRequest();
+/*        $user->fillFromRequest();
         $user->saveOrFail();
 
         if (!$user->id) {
@@ -57,7 +69,7 @@ class UsersEndpoint extends Controller
 
         return response()->json([
             'data' => User::find($user->id)->toArray(),
-        ]);
+        ]);*/
     }
 
     public function destroy(User $user)
@@ -68,10 +80,24 @@ class UsersEndpoint extends Controller
         return abort(Response::HTTP_NO_CONTENT);
     }
 
-/*    public function login(Request $request, User $user)
-    {
-        $user->fillFromRequest();
-        $user = User::find($user->mail);
+    public function login(Request $request) {
+
+        $user = User::where('mail', $request->mail)->first();
+        
+        if(isset($user)) {
+            if($user->password == $request->password) {
+                return response()->json([
+                    $user->toArray(),
+                ]);
+            } else {
+                return response()->json('Wrong password or mail',
+                );
+            }
+        } else {    
+            return response()->json('Wrong password or mail',
+            );
+        }
+
     }
-}*/
+}
 

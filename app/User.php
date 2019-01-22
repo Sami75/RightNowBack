@@ -22,8 +22,8 @@ class User extends ValidatingModel
         'cdp' => 'required|integer',
         'ville' => 'required|string',
         'sexe' => 'required|string',
-        'telephone' => 'required|integer',
-        'password' => 'required|min:6|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/',
+        'telephone' => 'required|numeric',
+        'password' => 'required|min:6',
     ];
 
     public $table = 'users';
